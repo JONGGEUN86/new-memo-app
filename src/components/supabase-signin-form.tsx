@@ -83,7 +83,7 @@ export default function SupabaseSignInForm() {
             />
           </div>
         </CardContent>
-        <CardFooter className="flex flex-col space-y-4">
+        <CardFooter className="flex flex-col space-y-6 pt-6">
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? '로그인 중...' : '로그인'}
           </Button>

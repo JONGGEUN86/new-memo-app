@@ -23,16 +23,12 @@ export default function SupabaseSignUpForm() {
   // 비밀번호 검증 함수
   const validatePassword = (password: string) => {
     const minLength = 8
-    const hasUpperCase = /[A-Z]/.test(password)
     const hasLowerCase = /[a-z]/.test(password)
     const hasNumbers = /\d/.test(password)
     const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password)
 
     if (password.length < minLength) {
       return '비밀번호는 최소 8자 이상이어야 합니다.'
-    }
-    if (!hasUpperCase) {
-      return '비밀번호는 대문자를 포함해야 합니다.'
     }
     if (!hasLowerCase) {
       return '비밀번호는 소문자를 포함해야 합니다.'
@@ -159,12 +155,12 @@ export default function SupabaseSignUpForm() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="8자 이상, 대소문자, 숫자, 특수문자 포함"
+              placeholder="8자 이상, 소문자, 숫자, 특수문자 포함"
               required
             />
             <div className="text-xs text-muted-foreground">
               • 최소 8자 이상<br/>
-              • 대문자, 소문자, 숫자, 특수문자 포함
+              • 소문자, 숫자, 특수문자 포함
             </div>
           </div>
           <div className="space-y-2">
@@ -179,7 +175,7 @@ export default function SupabaseSignUpForm() {
             />
           </div>
         </CardContent>
-        <CardFooter className="flex flex-col space-y-4">
+        <CardFooter className="flex flex-col space-y-6 pt-6">
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? '회원가입 중...' : '회원가입'}
           </Button>
