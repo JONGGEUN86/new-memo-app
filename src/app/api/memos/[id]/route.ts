@@ -18,7 +18,7 @@ export async function GET(
     const memo = await prisma.memo.findFirst({
       where: {
         id: id,
-        userId: session.user.id
+        userId: (session as { user?: { id?: string } }).user?.id
       }
     })
 
@@ -60,7 +60,7 @@ export async function PUT(
     const memo = await prisma.memo.updateMany({
       where: {
         id: id,
-        userId: session.user.id
+        userId: (session as { user?: { id?: string } }).user?.id
       },
       data: {
         title,
@@ -101,7 +101,7 @@ export async function DELETE(
     const memo = await prisma.memo.deleteMany({
       where: {
         id: id,
-        userId: session.user.id
+        userId: (session as { user?: { id?: string } }).user?.id
       }
     })
 

@@ -13,7 +13,7 @@ export async function GET() {
 
     const memos = await prisma.memo.findMany({
       where: {
-        userId: session.user.id
+        userId: (session as { user?: { id?: string } }).user?.id
       },
       orderBy: {
         updatedAt: 'desc'
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
       data: {
         title,
         content,
-        userId: session.user.id
+        userId: (session as { user?: { id?: string } }).user?.id
       }
     })
 
