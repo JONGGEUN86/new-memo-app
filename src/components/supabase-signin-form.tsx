@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@supabase/supabase-js'
+import bcrypt from 'bcryptjs'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -31,7 +32,6 @@ export default function SupabaseSignInForm() {
         .from('user_profiles')
         .select('*')
         .eq('email', email)
-        .eq('password', password) // 실제로는 해시 비교해야 하지만 임시로
         .single()
 
       console.log('Login result:', { data, error })
@@ -40,11 +40,18 @@ export default function SupabaseSignInForm() {
         console.error('Login error:', error)
         setError('이메일 또는 비밀번호가 올바르지 않습니다.')
       } else if (data) {
-        console.log('Login successful:', data)
-        // 로그인 성공 시 세션 저장 (간단한 방식)
-        localStorage.setItem('user', JSON.stringify(data))
-        router.push('/')
-        router.refresh()
+        // 패스워드 검증
+        const isPasswordValid = await bcrypt.compare(password, data.password)
+        
+        if (isPasswordValid) {
+          console.log('Login successful:', data)
+          // 로그인 성공 시 세션 저장 (간단한 방식)
+          localStorage.setItem('user', JSON.stringify(data))
+          router.push('/')
+          router.refresh()
+        } else {
+          setError('이메일 또는 비밀번호가 올바르지 않습니다.')
+        }
       } else {
         setError('로그인 정보를 찾을 수 없습니다.')
       }

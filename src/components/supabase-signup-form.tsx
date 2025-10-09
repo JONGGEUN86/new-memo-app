@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@supabase/supabase-js'
+import bcrypt from 'bcryptjs'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -74,12 +75,15 @@ export default function SupabaseSignUpForm() {
     }
 
     try {
+      // 패스워드 해시화
+      const hashedPassword = await bcrypt.hash(password, 10)
+      
       // user_profiles 테이블에 직접 사용자 생성
       const { data, error } = await supabase
         .from('user_profiles')
         .insert({
           email: email,
-          password: password, // 실제로는 해시화해야 하지만 임시로
+          password: hashedPassword, // 해시화된 패스워드
           name: name || null,
           nickname: nickname,
         })
