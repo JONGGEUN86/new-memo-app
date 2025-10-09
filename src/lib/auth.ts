@@ -29,12 +29,12 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' }
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      async authorize(credentials: any) {
+      authorize(credentials: any) {
         if (!credentials?.email || !credentials?.password) {
           return null
         }
 
-        const user = await prisma.user.findUnique({
+        const user = prisma.user.findUnique({
           where: {
             email: credentials.email
           }
@@ -44,7 +44,7 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
-        const isPasswordValid = await bcrypt.compare(
+        const isPasswordValid = bcrypt.compare(
           credentials.password,
           user.password
         )
@@ -77,14 +77,14 @@ export const authOptions: NextAuthOptions = {
       return token
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async session({ session, token }: any) {
+    session({ session, token }: any) {
       if (token) {
         session.user.id = token.id as string
       }
       return session
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async redirect({ url, baseUrl }: any) {
+    redirect({ url, baseUrl }: any) {
       // 로그아웃 후 로그인 페이지로 리다이렉트
       if (url === '/auth/signin') {
         return '/auth/signin'
