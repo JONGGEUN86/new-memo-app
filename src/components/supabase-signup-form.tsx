@@ -71,19 +71,6 @@ export default function SupabaseSignUpForm() {
     }
 
     try {
-      // 닉네임 중복 검사
-      const { data: existingUsers } = await supabase
-        .from('user_profiles')
-        .select('nickname')
-        .eq('nickname', nickname)
-        .limit(1)
-
-      if (existingUsers && existingUsers.length > 0) {
-        setError('이미 사용 중인 닉네임입니다.')
-        setIsLoading(false)
-        return
-      }
-
       const { error } = await supabase.auth.signUp({
         email,
         password,
