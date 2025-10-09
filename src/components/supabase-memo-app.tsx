@@ -344,6 +344,7 @@ export default function SupabaseMemoApp() {
                         size="sm"
                         onClick={() => handleEditSave(memo.id)}
                         disabled={!editFormData.title.trim() || !editFormData.content.trim()}
+                        className="bg-green-500 hover:bg-green-600 text-white border-2 border-green-600 hover:border-green-700 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                       >
                         <Save className="h-4 w-4 mr-1" />
                         저장
@@ -352,6 +353,7 @@ export default function SupabaseMemoApp() {
                         size="sm"
                         variant="outline"
                         onClick={handleEditCancel}
+                        className="bg-gray-500 hover:bg-gray-600 text-white border-2 border-gray-600 hover:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
                       >
                         <X className="h-4 w-4 mr-1" />
                         취소
@@ -391,6 +393,7 @@ export default function SupabaseMemoApp() {
                         size="sm"
                         variant="outline"
                         onClick={() => handleEdit(memo)}
+                        className="bg-blue-500 hover:bg-blue-600 text-white border-2 border-blue-600 hover:border-blue-700 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
                       >
                         <Edit className="h-4 w-4 mr-1" />
                         편집
@@ -399,6 +402,7 @@ export default function SupabaseMemoApp() {
                         size="sm"
                         variant="destructive"
                         onClick={() => handleDelete(memo.id)}
+                        className="bg-red-500 hover:bg-red-600 text-white border-2 border-red-600 hover:border-red-700 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
                       >
                         <Trash2 className="h-4 w-4 mr-1" />
                         삭제
