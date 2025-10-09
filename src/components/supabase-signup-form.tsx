@@ -71,25 +71,31 @@ export default function SupabaseSignUpForm() {
     }
 
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: {
             name: name || null,
             nickname: nickname,
-          },
-          emailRedirectTo: `${window.location.origin}/auth/signin`
+          }
         }
       })
 
+      console.log('Signup result:', { data, error })
+
       if (error) {
-        setError(error.message)
-      } else {
+        console.error('Supabase signup error:', error)
+        setError(`회원가입 실패: ${error.message}`)
+      } else if (data.user) {
+        console.log('Signup successful:', data.user)
         router.push('/auth/signin')
+      } else {
+        setError('회원가입 응답이 예상과 다릅니다.')
       }
-    } catch {
-      setError('회원가입 중 오류가 발생했습니다.')
+    } catch (err) {
+      console.error('Unexpected signup error:', err)
+      setError(`회원가입 중 예상치 못한 오류가 발생했습니다: ${err}`)
     } finally {
       setIsLoading(false)
     }
