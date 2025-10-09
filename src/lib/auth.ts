@@ -69,19 +69,22 @@ export const authOptions: NextAuthOptions = {
     signUp: '/auth/signup'
   },
   callbacks: {
-    async jwt({ token, user }) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async jwt({ token, user }: any) {
       if (user) {
         token.id = user.id
       }
       return token
     },
-    async session({ session, token }) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async session({ session, token }: any) {
       if (token) {
         session.user.id = token.id as string
       }
       return session
     },
-    async redirect({ url, baseUrl }) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async redirect({ url, baseUrl }: any) {
       // 로그아웃 후 로그인 페이지로 리다이렉트
       if (url === '/auth/signin') {
         return '/auth/signin'
