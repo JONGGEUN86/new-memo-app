@@ -5,7 +5,7 @@ type NextAuthOptions = {
     name: string
     type: "credentials"
     credentials: Record<string, { label: string; type: string }>
-    authorize: (credentials: Record<string, string> | undefined, req: { query?: Record<string, unknown>; body?: Record<string, unknown>; headers?: Record<string, unknown>; method: string }) => Promise<Record<string, unknown> | null>
+    authorize: (credentials: Record<string, string> | undefined, req: { query?: Record<string, unknown>; body?: Record<string, unknown>; headers?: Record<string, unknown>; method?: string }) => Promise<Record<string, unknown> | null>
   }>
   session: { strategy: string }
   pages: { signIn: string; signUp: string }
