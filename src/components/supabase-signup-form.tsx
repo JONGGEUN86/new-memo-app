@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@supabase/supabase-js'
 import bcrypt from 'bcryptjs'
+import PasswordStrengthIndicator from './password-strength-indicator'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -18,11 +19,27 @@ export default function SupabaseSignUpForm() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const [passwordMatchError, setPasswordMatchError] = useState('')
   const router = useRouter()
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   )
+
+  // 비밀번호 확인 검증 함수
+  const validatePasswordMatch = (password: string, confirmPassword: string) => {
+    if (confirmPassword && password !== confirmPassword) {
+      setPasswordMatchError('비밀번호가 일치하지 않습니다.')
+    } else {
+      setPasswordMatchError('')
+    }
+  }
+
+  // 비밀번호 확인 입력 핸들러
+  const handleConfirmPasswordChange = (value: string) => {
+    setConfirmPassword(value)
+    validatePasswordMatch(password, value)
+  }
 
   // 비밀번호 검증 함수
   const validatePassword = (password: string) => {
@@ -63,6 +80,7 @@ export default function SupabaseSignUpForm() {
 
     if (password !== confirmPassword) {
       setError('비밀번호가 일치하지 않습니다.')
+      setPasswordMatchError('비밀번호가 일치하지 않습니다.')
       setIsLoading(false)
       return
     }
@@ -96,6 +114,14 @@ export default function SupabaseSignUpForm() {
         setError(`회원가입 실패: ${error.message}`)
       } else if (data && data.length > 0) {
         console.log('User profile created successfully:', data[0])
+        // 폼 초기화
+        setName('')
+        setNickname('')
+        setEmail('')
+        setPassword('')
+        setConfirmPassword('')
+        setError('')
+        setPasswordMatchError('')
         router.push('/auth/signin')
       } else {
         setError('회원가입 응답이 예상과 다릅니다.')
@@ -152,31 +178,31 @@ export default function SupabaseSignUpForm() {
               required
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">비밀번호</Label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="8자 이상, 대소문자, 숫자, 특수문자 포함"
-              required
-            />
-            <div className="text-xs text-muted-foreground">
-              • 최소 8자 이상<br/>
-              • 대문자, 소문자, 숫자, 특수문자 포함
-            </div>
-          </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">비밀번호</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="8자 이상, 대소문자, 숫자, 특수문자 포함"
+                  required
+                />
+                <PasswordStrengthIndicator password={password} />
+              </div>
           <div className="space-y-2">
             <Label htmlFor="confirmPassword">비밀번호 확인</Label>
             <Input
               id="confirmPassword"
               type="password"
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              onChange={(e) => handleConfirmPasswordChange(e.target.value)}
               placeholder="비밀번호를 다시 입력하세요"
               required
             />
+            {passwordMatchError && (
+              <div className="text-red-500 text-xs">{passwordMatchError}</div>
+            )}
           </div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-6 pt-6">
