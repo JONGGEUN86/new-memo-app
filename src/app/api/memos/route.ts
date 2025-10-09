@@ -47,11 +47,16 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    const userId = (session as { user?: { id?: string } }).user?.id
+    if (!userId) {
+      return NextResponse.json({ error: 'User ID not found' }, { status: 401 })
+    }
+
     const memo = await prisma.memo.create({
       data: {
         title,
         content,
-        userId: (session as { user?: { id?: string } }).user?.id
+        userId: userId
       }
     })
 
