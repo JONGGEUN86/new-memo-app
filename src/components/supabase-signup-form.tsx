@@ -48,7 +48,7 @@ export default function SupabaseSignUpForm() {
       } else {
         router.push('/auth/signin')
       }
-    } catch (error) {
+    } catch {
       setError('회원가입 중 오류가 발생했습니다.')
     } finally {
       setIsLoading(false)

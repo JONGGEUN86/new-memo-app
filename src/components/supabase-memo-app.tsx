@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase-auth'
 import { Button } from '@/components/ui/button'
@@ -14,7 +14,7 @@ import { Plus, LogOut, Edit, Trash2, Save, X } from 'lucide-react'
 export default function SupabaseMemoApp() {
   const router = useRouter()
   const supabase = createClient()
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<{ id: string; email?: string; user_metadata?: { name?: string; nickname?: string } } | null>(null)
   const [memos, setMemos] = useState<Memo[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isCreating, setIsCreating] = useState(false)
@@ -49,7 +49,7 @@ export default function SupabaseMemoApp() {
   }, [supabase.auth, router])
 
   // 메모 목록 가져오기
-  const fetchMemos = async () => {
+  const fetchMemos = useCallback(async () => {
     if (!user) return
     
     try {
@@ -90,13 +90,13 @@ export default function SupabaseMemoApp() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [user, supabase])
 
   useEffect(() => {
     if (user) {
       fetchMemos()
     }
-  }, [user])
+  }, [user, fetchMemos])
 
   // 메모 생성
   const handleSubmit = async (e: React.FormEvent) => {
