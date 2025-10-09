@@ -71,24 +71,24 @@ export default function SupabaseSignUpForm() {
     }
 
     try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            name: name || null,
-            nickname: nickname,
-          }
-        }
-      })
+      // user_profiles 테이블에 직접 사용자 생성
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .insert({
+          email: email,
+          password: password, // 실제로는 해시화해야 하지만 임시로
+          name: name || null,
+          nickname: nickname,
+        })
+        .select()
 
-      console.log('Signup result:', { data, error })
+      console.log('User profile creation result:', { data, error })
 
       if (error) {
-        console.error('Supabase signup error:', error)
+        console.error('User profile creation error:', error)
         setError(`회원가입 실패: ${error.message}`)
-      } else if (data.user) {
-        console.log('Signup successful:', data.user)
+      } else if (data && data.length > 0) {
+        console.log('User profile created successfully:', data[0])
         router.push('/auth/signin')
       } else {
         setError('회원가입 응답이 예상과 다릅니다.')

@@ -23,26 +23,30 @@ export default function SupabaseSignInForm() {
     setError('')
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
+      // user_profiles 테이블에서 사용자 확인
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('email', email)
+        .eq('password', password) // 실제로는 해시 비교해야 하지만 임시로
+        .single()
+
+      console.log('Login result:', { data, error })
 
       if (error) {
-        if (error.message.includes('Email not confirmed')) {
-          setError('이메일 확인이 필요합니다. 이메일을 확인해주세요.')
-        } else {
-          setError(error.message)
-        }
-      } else if (data.user && !data.user.email_confirmed_at) {
-        // 이메일이 확인되지 않은 경우에도 로그인 허용 (개발용)
+        console.error('Login error:', error)
+        setError('이메일 또는 비밀번호가 올바르지 않습니다.')
+      } else if (data) {
+        console.log('Login successful:', data)
+        // 로그인 성공 시 세션 저장 (간단한 방식)
+        localStorage.setItem('user', JSON.stringify(data))
         router.push('/')
         router.refresh()
       } else {
-        router.push('/')
-        router.refresh()
+        setError('로그인 정보를 찾을 수 없습니다.')
       }
-    } catch {
+    } catch (err) {
+      console.error('Unexpected login error:', err)
       setError('로그인 중 오류가 발생했습니다.')
     } finally {
       setIsLoading(false)

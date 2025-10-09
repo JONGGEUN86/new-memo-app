@@ -38,15 +38,17 @@ export default function SupabaseMemoApp() {
 
   // 사용자 정보 가져오기
   useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      setUser(user)
-      if (!user) {
+    const getUser = () => {
+      const userData = localStorage.getItem('user')
+      if (userData) {
+        const user = JSON.parse(userData)
+        setUser(user)
+      } else {
         router.push('/auth/signin')
       }
     }
     getUser()
-  }, [supabase.auth, router])
+  }, [router])
 
   // 메모 목록 가져오기
   const fetchMemos = useCallback(async () => {
