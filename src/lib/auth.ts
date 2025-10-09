@@ -3,8 +3,8 @@ type NextAuthOptions = {
   providers: Array<{
     id: string
     name: string
-    type: string
-    credentials: Record<string, unknown>
+    type: "credentials"
+    credentials: Record<string, { label: string; type: string }>
     authorize: (credentials: Record<string, unknown>) => Promise<unknown> | null
   }>
   session: { strategy: string }
