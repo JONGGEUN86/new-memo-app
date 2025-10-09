@@ -8,7 +8,8 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await getServerSession(authOptions)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const session = await getServerSession(authOptions as any)
     
     if (!session || !(session as { user?: { id?: string } }).user || !(session as { user?: { id?: string } }).user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -41,7 +42,8 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await getServerSession(authOptions)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const session = await getServerSession(authOptions as any)
     
     if (!session || !(session as { user?: { id?: string } }).user || !(session as { user?: { id?: string } }).user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -91,7 +93,8 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await getServerSession(authOptions)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const session = await getServerSession(authOptions as any)
     
     if (!session || !(session as { user?: { id?: string } }).user || !(session as { user?: { id?: string } }).user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
