@@ -1,4 +1,14 @@
-import type { NextAuthOptions } from 'next-auth'
+// NextAuthOptions 타입을 직접 정의
+type NextAuthOptions = {
+  providers: any[]
+  session: { strategy: string }
+  pages: { signIn: string; signUp: string }
+  callbacks: {
+    jwt: (params: any) => any
+    session: (params: any) => any
+    redirect: (params: any) => string
+  }
+}
 import CredentialsProvider from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
 import { prisma } from './prisma'
