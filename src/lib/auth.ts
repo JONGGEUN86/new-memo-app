@@ -21,7 +21,8 @@ import { prisma } from './prisma'
 
 export const authOptions: NextAuthOptions = {
   providers: [
-    CredentialsProvider({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (CredentialsProvider as any)({
       name: 'credentials',
       credentials: {
         email: { label: 'Email', type: 'email' },
