@@ -17,7 +17,7 @@ export default function SupabaseMemoApp() {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   )
-  const [user, setUser] = useState<{ id: string; email?: string; user_metadata?: { name?: string; nickname?: string } } | null>(null)
+  const [user, setUser] = useState<{ id: string; email?: string; name?: string; nickname?: string } | null>(null)
   const [memos, setMemos] = useState<Memo[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isCreating, setIsCreating] = useState(false)
@@ -195,8 +195,11 @@ export default function SupabaseMemoApp() {
   // 로그아웃 처리
   const handleLogout = async () => {
     try {
-      await supabase.auth.signOut()
+      // localStorage에서 사용자 정보 제거
+      localStorage.removeItem('user')
+      setUser(null)
       router.push('/auth/signin')
+      router.refresh()
     } catch (error) {
       console.error('Logout error:', error)
       router.push('/auth/signin')
@@ -229,7 +232,7 @@ export default function SupabaseMemoApp() {
           <h1 className="text-2xl font-bold text-foreground">메모앱</h1>
           <div className="flex items-center gap-4">
             <span className="text-sm text-muted-foreground">
-              안녕하세요, {user.user_metadata?.name || user.email}님
+              안녕하세요, {user?.nickname || user?.name || user?.email || '게스트'}님
             </span>
             <Button
               variant="outline"
@@ -362,7 +365,7 @@ export default function SupabaseMemoApp() {
                           )}
                         </div>
                         <span className="text-xs text-muted-foreground">
-                          작성자: {user?.user_metadata?.nickname || user?.user_metadata?.name || user?.email || '알 수 없음'}
+                          작성자: {user?.nickname || user?.name || user?.email || '알 수 없음'}
                         </span>
                       </div>
                     </CardDescription>
