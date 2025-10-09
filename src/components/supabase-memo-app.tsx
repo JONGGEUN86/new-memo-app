@@ -212,13 +212,25 @@ export default function SupabaseMemoApp() {
     setIsCreating(false)
   }
 
-  // 로딩 중이거나 사용자가 없을 때
-  if (isLoading || !user) {
+  // 로딩 중일 때
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
           <p className="mt-2 text-muted-foreground">로딩 중...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // 사용자가 없을 때 (로그인 페이지로 리다이렉트는 useEffect에서 처리)
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-2 text-muted-foreground">인증 확인 중...</p>
         </div>
       </div>
     )
