@@ -73,7 +73,7 @@ export async function PUT(
     }
 
     const updatedMemo = await prisma.memo.findUnique({
-      where: { id: params.id }
+      where: { id: (await params).id }
     })
 
     return NextResponse.json(updatedMemo)
