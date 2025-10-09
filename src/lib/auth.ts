@@ -29,12 +29,12 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' }
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      authorize(credentials: any) {
+      async authorize(credentials: any) {
         if (!credentials?.email || !credentials?.password) {
           return null
         }
 
-        const user = prisma.user.findUnique({
+        const user = await prisma.user.findUnique({
           where: {
             email: credentials.email
           }
@@ -44,7 +44,7 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
-        const isPasswordValid = bcrypt.compare(
+        const isPasswordValid = await bcrypt.compare(
           credentials.password,
           user.password
         )
