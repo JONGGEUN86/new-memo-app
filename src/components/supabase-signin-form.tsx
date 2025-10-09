@@ -78,13 +78,14 @@ export default function SupabaseSignInForm() {
           )}
           <div className="space-y-2">
             <Label htmlFor="email">이메일</Label>
-            <Input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="off"
+                  required
+                />
           </div>
           <div className="space-y-2">
             <Label htmlFor="password">비밀번호</Label>
@@ -93,6 +94,7 @@ export default function SupabaseSignInForm() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              autoComplete="off"
               required
             />
           </div>
