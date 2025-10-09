@@ -1,12 +1,12 @@
 // NextAuthOptions 타입을 직접 정의
 type NextAuthOptions = {
-  providers: any[]
+  providers: unknown[]
   session: { strategy: string }
   pages: { signIn: string; signUp: string }
   callbacks: {
-    jwt: (params: any) => any
-    session: (params: any) => any
-    redirect: (params: any) => string
+    jwt: (params: { token: unknown; user: unknown }) => unknown
+    session: (params: { session: unknown; token: unknown }) => unknown
+    redirect: (params: { url: string; baseUrl: string }) => string
   }
 }
 import CredentialsProvider from 'next-auth/providers/credentials'
