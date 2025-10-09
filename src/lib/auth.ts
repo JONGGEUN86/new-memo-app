@@ -1,11 +1,17 @@
 // NextAuthOptions 타입을 직접 정의
 type NextAuthOptions = {
-  providers: unknown[]
+  providers: Array<{
+    id: string
+    name: string
+    type: string
+    credentials: Record<string, unknown>
+    authorize: (credentials: Record<string, unknown>) => Promise<unknown> | null
+  }>
   session: { strategy: string }
   pages: { signIn: string; signUp: string }
   callbacks: {
-    jwt: (params: { token: unknown; user: unknown }) => unknown
-    session: (params: { session: unknown; token: unknown }) => unknown
+    jwt: (params: { token: Record<string, unknown>; user: Record<string, unknown> }) => Record<string, unknown>
+    session: (params: { session: Record<string, unknown>; token: Record<string, unknown> }) => Record<string, unknown>
     redirect: (params: { url: string; baseUrl: string }) => string
   }
 }
