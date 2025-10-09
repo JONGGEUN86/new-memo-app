@@ -71,34 +71,17 @@ export default function SupabaseSignUpForm() {
     }
 
     try {
-      const { data, error } = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: {
             name: name || null,
+            nickname: nickname,
           },
           emailRedirectTo: `${window.location.origin}/auth/signin`
         }
       })
-
-      // 회원가입 성공 후 user_profiles에 nickname 저장
-      if (data.user && !error) {
-        const { error: profileError } = await supabase
-          .from('user_profiles')
-          .insert({
-            user_id: data.user.id,
-            nickname: nickname,
-            name: name || null
-          })
-
-        if (profileError) {
-          console.error('Profile creation error:', profileError)
-          setError('프로필 생성 중 오류가 발생했습니다.')
-          setIsLoading(false)
-          return
-        }
-      }
 
       if (error) {
         setError(error.message)
